@@ -25,10 +25,6 @@ public class MainActivity extends Activity {
     private int choose_id[] = { 0 , 1 ,2 ,3};
     private  List<RadioButton> choose  = new ArrayList<RadioButton>();
 
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
