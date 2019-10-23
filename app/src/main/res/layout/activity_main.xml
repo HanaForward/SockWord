@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:text="Parent"
+            android:text=""
             android:textColor="#fff"
             android:textSize="50dp" />
         
@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:gravity="center_horizontal"
-        android:text="[Perent]"
+        android:text=""
         android:textColor="#fff"
         android:textSize="20dp" />
 

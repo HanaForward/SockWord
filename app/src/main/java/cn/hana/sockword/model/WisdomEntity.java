@@ -3,18 +3,16 @@ package cn.hana.sockword.model;
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
-public class ThesaurusGen extends SugarRecord {
+
+public class WisdomEntity extends SugarRecord {
     @Unique
     public int id;
-    public String word;
     public String english;
     public String china;
-    public String sign;
 
-    public ThesaurusGen(){
+    public WisdomEntity(){
 
     }
-
 
 
 }
