@@ -17,6 +17,10 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.RequiresApi;
+
+import com.orm.query.Condition;
+import com.orm.query.Select;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -31,8 +35,12 @@ import java.util.Locale;
 import java.util.Random;
 
 import cn.hana.sockword.model.ThesaurusGen;
+import cn.hana.sockword.model.Wrongly;
 
 public class MainActivity extends Activity {
+    private int allNum,nowNum = 0,title_id  ;
+    private boolean isRight;
+
     private TextView time_text, date_text;
     private TextView word_text, english_text;
     private float x1,y1,x2,y2;
@@ -78,6 +86,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sharedPreferences =  getSharedPreferences("share",Context.MODE_PRIVATE);
+
+        allNum = sharedPreferences.getInt("allNum", 2);
+
         editor = sharedPreferences.edit();
 
 
@@ -112,6 +123,13 @@ public class MainActivity extends Activity {
                     if (choose_id[i] == checkedId) {
                         //Log.d("Debug", String.valueOf(choose.get(i).getText()));
                         if ((boolean) choose.get(i).getTag()) {
+                            Wrongly wrongly = Select.from(Wrongly.class).where(Condition.prop("qid").eq(title_id)).first();
+                            if(wrongly != null)
+                            {
+                                Wrongly.delete(wrongly);
+                            }
+                            nowNum++;
+                            isRight = true;
                             word_text.setTextColor(Color.GREEN);
                             english_text.setTextColor(Color.GREEN);
                             choose.get(i).setTextColor(Color.GREEN);
@@ -121,6 +139,14 @@ public class MainActivity extends Activity {
 
                         } else {
                             int num = sharedPreferences.getInt("wrong",0) + 1;
+
+                            Wrongly wrongly = Select.from(Wrongly.class).where(Condition.prop("qid").eq(title_id)).first();
+                            if(wrongly == null)
+                            {
+                                wrongly = new Wrongly(title_id);
+                                Wrongly.save(wrongly);
+                            }
+
                             editor.putInt("wrong",num);
                             editor.commit();
 
@@ -136,6 +162,8 @@ public class MainActivity extends Activity {
     }
     public void getNextData() {
 
+        isRight = false;
+
         word_text.setTextColor(Color.WHITE);
         english_text.setTextColor(Color.WHITE);
         for (RadioButton radioButton : choose)
@@ -147,6 +175,9 @@ public class MainActivity extends Activity {
         int flag = ra.nextInt(20);
         int[] ints = spanNum(4, 20, flag);
         ThesaurusGen title = ThesaurusGen.findById(ThesaurusGen.class, flag);
+
+        title_id = flag;
+
         word_text.setText(title.word);
         english_text.setText(title.english);
         flag = ra.nextInt(4);
@@ -198,7 +229,12 @@ public class MainActivity extends Activity {
             }
             else  if(x2 - x1 > 200)//向右划
             {
-                unlocked();
+                if(nowNum >= allNum){
+                    unlocked();
+                }else {
+                    Toast.makeText(this, "解锁需要 " + (allNum - nowNum) + "道" , Toast.LENGTH_SHORT).show();
+                }
+
             }
         }
         return super.onTouchEvent(event);

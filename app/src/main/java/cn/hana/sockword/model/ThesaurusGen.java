@@ -5,7 +5,7 @@ import com.orm.dsl.Unique;
 
 public class ThesaurusGen extends SugarRecord {
     @Unique
-    public int id;
+    public int ID;
     public String word;
     public String english;
     public String china;

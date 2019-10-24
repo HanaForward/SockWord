@@ -11,10 +11,9 @@ public class Wrongly extends SugarRecord {
     private int qid;
     private Timestamp create_at;
 
-    public Wrongly()
-    {
-
-
-
+    public Wrongly() { }
+    public Wrongly(int qid) {
+        this.qid =qid;
+        
     }
 }
