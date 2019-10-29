@@ -49,13 +49,14 @@ public class HomeActivity extends Activity  implements View.OnClickListener {
         }
 
 
+
         wrongBtn = (Button) findViewById(R.id.wrong_btn);
         wrongBtn.setOnClickListener(this);
 
+        editor.putBoolean("tf", false);
+        editor.commit();
         screenListener = new ScreenListener(this);
-
         screenListener.begin(new ScreenListener.ScreenStateListener() {
-
             @Override
             public void onScreenOn() {
                 if (sharedPreferences.getBoolean("btnTf",false)){
@@ -70,7 +71,6 @@ public class HomeActivity extends Activity  implements View.OnClickListener {
                 editor.putBoolean("tf", true);
                 editor.commit();
                 BaseApplication.destroyActivity("lockActivity");
-
             }
 
             @Override
@@ -79,11 +79,6 @@ public class HomeActivity extends Activity  implements View.OnClickListener {
                 editor.commit();
             }
         });
-
-
-
-
-
 
     }
     public void study(View v) {

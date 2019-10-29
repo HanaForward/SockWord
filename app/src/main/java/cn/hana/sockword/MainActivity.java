@@ -11,20 +11,20 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.RequiresApi;
-
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.SpeechSynthesizer;
+import com.iflytek.cloud.SpeechUtility;
+import com.iflytek.cloud.SynthesizerListener;
 import com.orm.query.Condition;
 import com.orm.query.Select;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,14 +33,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
-
 import cn.hana.sockword.model.ThesaurusGen;
 import cn.hana.sockword.model.Wrongly;
 
-public class MainActivity extends Activity {
-    private int allNum,nowNum = 0,title_id  ;
+public class MainActivity extends Activity implements SynthesizerListener {
+    private int allNum,nowNum = 0,title_id ;
     private boolean isRight;
-
+    private SpeechSynthesizer speechSynthesizer;
     private TextView time_text, date_text;
     private TextView word_text, english_text;
     private float x1,y1,x2,y2;
@@ -54,6 +53,16 @@ public class MainActivity extends Activity {
 
 
     private void init() {
+        BaseApplication.addDestroyActiivty(this,"lockActivity");
+
+        findViewById(R.id.play_vioce).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = word_text.getText().toString();
+
+                startSpeaking(text);
+            }
+        });
 
         time_text = findViewById(R.id.time_text);
         date_text = findViewById(R.id.date_text);
@@ -77,9 +86,24 @@ public class MainActivity extends Activity {
             }
         }
 
+        setParam();
+
 
     }
 
+    public void startSpeaking(String text)
+    {
+        speechSynthesizer.startSpeaking(text, this);
+    }
+
+    public void setParam() {
+        SpeechUtility.createUtility(this, SpeechConstant.APPID + "=5ba25989");
+        speechSynthesizer = SpeechSynthesizer.createSynthesizer(this,null);
+        speechSynthesizer.setParameter(SpeechConstant.VOICE_NAME, "xiaoyan");
+        speechSynthesizer.setParameter(SpeechConstant.SPEED, "50");
+        speechSynthesizer.setParameter(SpeechConstant.VOLUME, "50");
+        speechSynthesizer.setParameter(SpeechConstant.PITCH, "50");
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -262,4 +286,38 @@ public class MainActivity extends Activity {
         return temp;
     }
 
+    @Override
+    public void onSpeakBegin() {
+
+    }
+
+    @Override
+    public void onBufferProgress(int i, int i1, int i2, String s) {
+
+    }
+
+    @Override
+    public void onSpeakPaused() {
+
+    }
+
+    @Override
+    public void onSpeakResumed() {
+
+    }
+
+    @Override
+    public void onSpeakProgress(int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onCompleted(SpeechError speechError) {
+
+    }
+
+    @Override
+    public void onEvent(int i, int i1, int i2, Bundle bundle) {
+
+    }
 }
