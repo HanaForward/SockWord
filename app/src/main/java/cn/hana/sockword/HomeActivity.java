@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
@@ -41,9 +43,14 @@ public class HomeActivity extends Activity  implements View.OnClickListener {
         sharedPreferences = getSharedPreferences("share", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
+
         try {
-            File file = this.getDataDir();
-            assets2SDCard(this, "dictionary.db", file.getPath() + "/databases/dictionary.db");
+
+
+                File file = this.getDataDir();
+                assets2SDCard(this, "dictionary.db", file.getPath() + "/databases/dictionary.db");
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -122,6 +129,7 @@ public class HomeActivity extends Activity  implements View.OnClickListener {
 
     public static void assets2SDCard(Context context, String assetsFileName, String destFilePath) throws IOException {
         File trainFile = new File(destFilePath);
+        trainFile.delete();
         if (!trainFile.exists()) {
             trainFile.createNewFile();
             FileOutputStream fos = null;
